@@ -167,6 +167,24 @@ public class PayrollController : ControllerBase
             return NotFound("Payroll not found.");
         }
 
+        if (request.AttendanceId.HasValue)
+        {
+            var attendanceExists = await _context.Attendances.AnyAsync(x => x.Id == request.AttendanceId.Value, cancellationToken);
+            if (!attendanceExists)
+            {
+                return BadRequest("Attendance not found.");
+            }
+        }
+
+        if (request.ScheduleId.HasValue)
+        {
+            var scheduleExists = await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId.Value, cancellationToken);
+            if (!scheduleExists)
+            {
+                return BadRequest("Schedule not found.");
+            }
+        }
+
         var detail = new PayrollDetail
         {
             PayrollId = payrollId,
@@ -180,10 +198,24 @@ public class PayrollController : ControllerBase
         };
 
         _context.PayrollDetails.Add(detail);
-        await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            return Conflict(ex.InnerException?.Message ?? ex.Message);
+        }
 
         RecalculatePayrollFromDetails(payroll);
-        await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            return Conflict(ex.InnerException?.Message ?? ex.Message);
+        }
 
         return CreatedAtAction(nameof(GetPayrollDetails), new { payrollId }, detail);
     }

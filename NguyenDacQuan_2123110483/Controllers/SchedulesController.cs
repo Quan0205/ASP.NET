@@ -107,7 +107,16 @@ public class SchedulesController : ControllerBase
         }
 
         _context.Schedules.Remove(schedule);
-        await _context.SaveChangesAsync(cancellationToken);
+
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            return Conflict(ex.InnerException?.Message ?? ex.Message);
+        }
+
         return NoContent();
     }
 
