@@ -31,7 +31,9 @@ public enum PayrollDetailType
     Allowance = 1,
     Bonus = 2,
     Penalty = 3,
-    Overtime = 4
+    Overtime = 4,
+    Insurance = 5,
+    Tax = 6
 }
 
 public enum ContractType
@@ -69,4 +71,28 @@ public enum EmployeeTrainingStatus
     Completed = 3,
     Failed = 4,
     Cancelled = 5
+}
+
+public enum LeaveRequestStatus
+{
+    Pending = 1,
+    Approved = 2,
+    Rejected = 3,
+    Cancelled = 4
+}
+
+public enum ShiftSwapStatus
+{
+    Pending = 1,
+    Approved = 2,
+    Rejected = 3,
+    Cancelled = 4
+}
+
+public enum AttendanceAdjustmentStatus
+{
+    Pending = 1,
+    Approved = 2,
+    Rejected = 3,
+    Cancelled = 4
 }

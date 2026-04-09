@@ -1,183 +1,58 @@
-using CoffeeHRM.Data;
+using CoffeeHRM.Dtos;
 using CoffeeHRM.Models;
+using CoffeeHRM.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeHRM.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[PermissionAuthorize(PermissionCodes.MasterBranchesManage)]
 public class BranchesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IBranchService _branchService;
 
-    public BranchesController(AppDbContext context)
+    public BranchesController(IBranchService branchService)
     {
-        _context = context;
+        _branchService = branchService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Branch>>> GetBranches()
+    public async Task<ActionResult<IEnumerable<BranchResponseDto>>> GetBranches(CancellationToken cancellationToken)
     {
-        return await _context.Branches
-            .AsNoTracking()
-            .ToListAsync();
+        return Ok(await _branchService.GetAllAsync(cancellationToken));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Branch>> GetBranch(int id)
+    public async Task<ActionResult<BranchResponseDto>> GetBranch(int id, CancellationToken cancellationToken)
     {
-        var branch = await _context.Branches
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (branch == null)
-        {
-            return NotFound();
-        }
-
-        return branch;
+        var branch = await _branchService.GetByIdAsync(id, cancellationToken);
+        return branch == null ? NotFound() : Ok(branch);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Branch>> PostBranch([FromBody] Branch branch, CancellationToken cancellationToken)
+    public async Task<ActionResult<BranchResponseDto>> PostBranch([FromBody] BranchUpsertDto branch, CancellationToken cancellationToken)
     {
-        if (branch == null)
+        var result = await _branchService.CreateAsync(branch, cancellationToken);
+        if (result.Error != null)
         {
-            return BadRequest();
+            return StatusCode(result.StatusCode ?? StatusCodes.Status400BadRequest, result.Error);
         }
 
-        if (string.IsNullOrWhiteSpace(branch.BranchCode))
-        {
-            return BadRequest("BranchCode is required.");
-        }
-
-        if (string.IsNullOrWhiteSpace(branch.BranchName))
-        {
-            return BadRequest("BranchName is required.");
-        }
-
-        if (string.IsNullOrWhiteSpace(branch.Address))
-        {
-            return BadRequest("Address is required.");
-        }
-
-        branch.BranchCode = branch.BranchCode.Trim();
-        branch.BranchName = branch.BranchName.Trim();
-        branch.Address = branch.Address.Trim();
-
-        var duplicateCode = await _context.Branches.AnyAsync(
-            x => x.BranchCode == branch.BranchCode,
-            cancellationToken);
-
-        if (duplicateCode)
-        {
-            return Conflict("BranchCode already exists.");
-        }
-
-        _context.Branches.Add(branch);
-
-        try
-        {
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-        {
-            return Conflict(ex.InnerException?.Message ?? ex.Message);
-        }
-
-        return CreatedAtAction(nameof(GetBranch), new { id = branch.Id }, branch);
+        return CreatedAtAction(nameof(GetBranch), new { id = result.Branch!.Id }, result.Branch);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutBranch(int id, [FromBody] Branch branch, CancellationToken cancellationToken)
+    public async Task<IActionResult> PutBranch(int id, [FromBody] BranchUpsertDto branch, CancellationToken cancellationToken)
     {
-        if (branch == null)
-        {
-            return BadRequest();
-        }
-
-        var existing = await _context.Branches.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (existing == null)
-        {
-            return NotFound();
-        }
-
-        if (string.IsNullOrWhiteSpace(branch.BranchCode))
-        {
-            return BadRequest("BranchCode is required.");
-        }
-
-        if (string.IsNullOrWhiteSpace(branch.BranchName))
-        {
-            return BadRequest("BranchName is required.");
-        }
-
-        if (string.IsNullOrWhiteSpace(branch.Address))
-        {
-            return BadRequest("Address is required.");
-        }
-
-        branch.BranchCode = branch.BranchCode.Trim();
-        branch.BranchName = branch.BranchName.Trim();
-        branch.Address = branch.Address.Trim();
-
-        var duplicateCode = await _context.Branches.AnyAsync(
-            x => x.Id != id && x.BranchCode == branch.BranchCode,
-            cancellationToken);
-
-        if (duplicateCode)
-        {
-            return Conflict("BranchCode already exists.");
-        }
-
-        existing.BranchCode = branch.BranchCode;
-        existing.BranchName = branch.BranchName;
-        existing.Address = branch.Address;
-        existing.Phone = branch.Phone;
-        existing.IsActive = branch.IsActive;
-
-        try
-        {
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!await _context.Branches.AnyAsync(x => x.Id == id, cancellationToken))
-            {
-                return NotFound();
-            }
-
-            throw;
-        }
-        catch (DbUpdateException ex)
-        {
-            return Conflict(ex.InnerException?.Message ?? ex.Message);
-        }
-
-        return NoContent();
+        var result = await _branchService.UpdateAsync(id, branch, cancellationToken);
+        return result.Success ? NoContent() : StatusCode(result.StatusCode ?? StatusCodes.Status400BadRequest, result.Error);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteBranch(int id, CancellationToken cancellationToken)
     {
-        var branch = await _context.Branches.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (branch == null)
-        {
-            return NotFound();
-        }
-
-        branch.IsActive = false;
-
-        try
-        {
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-        {
-            return Conflict(ex.InnerException?.Message ?? ex.Message);
-        }
-
-        return NoContent();
+        var result = await _branchService.DeactivateAsync(id, cancellationToken);
+        return result.Success ? NoContent() : StatusCode(result.StatusCode ?? StatusCodes.Status400BadRequest, result.Error);
     }
 }

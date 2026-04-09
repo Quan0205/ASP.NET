@@ -42,6 +42,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EarlyLeaveMinutes")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -49,6 +52,9 @@ namespace NguyenDacQuan_2123110483.Migrations
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("LateMinutes")
                         .ValueGeneratedOnAdd()
@@ -95,6 +101,69 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.ToTable("Attendances");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.AttendanceAdjustment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AttendanceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DecisionNote")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("RequestedCheckInAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RequestedCheckOutAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("RequestedStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ReviewedByUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ReviewedByUserAccountId");
+
+                    b.HasIndex("AttendanceId", "Status");
+
+                    b.ToTable("AttendanceAdjustments");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.AuditLog", b =>
                 {
                     b.Property<int>("Id")
@@ -113,9 +182,15 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("IpAddress")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("NewValues")
                         .HasMaxLength(2000)
@@ -176,10 +251,16 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
@@ -210,6 +291,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -222,6 +306,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<decimal?>("InterviewScore")
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Note")
                         .HasMaxLength(250)
@@ -270,6 +357,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -296,6 +386,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
@@ -346,6 +439,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("EarlyLeavePenaltyPerMinute")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(18, 2)
@@ -366,6 +462,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("LatePenaltyPerMinute")
                         .ValueGeneratedOnAdd()
@@ -418,8 +517,14 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<decimal?>("Score")
                         .HasPrecision(5, 2)
@@ -455,8 +560,14 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("KpiMonth")
                         .HasColumnType("int");
@@ -492,6 +603,70 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.ToTable("KPIs");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.LeaveRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DecisionNote")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ReviewedByUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalDays")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewedByUserAccountId");
+
+                    b.HasIndex("EmployeeId", "StartDate", "EndDate");
+
+                    b.ToTable("LeaveRequests");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Payroll", b =>
                 {
                     b.Property<int>("Id")
@@ -504,6 +679,12 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ApprovedByUserAccountId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("BaseAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -512,7 +693,16 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ClosedByUserAccountId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeContractId")
@@ -524,6 +714,20 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<decimal>("HourlyRate")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InsuranceAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<decimal>("OvertimeAmount")
                         .HasPrecision(18, 2)
@@ -545,6 +749,10 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("TotalSalary")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -558,12 +766,67 @@ namespace NguyenDacQuan_2123110483.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApprovedByUserAccountId");
+
+                    b.HasIndex("ClosedByUserAccountId");
+
                     b.HasIndex("EmployeeContractId");
 
                     b.HasIndex("EmployeeId", "PayrollMonth", "PayrollYear")
                         .IsUnique();
 
+                    b.HasIndex("PayrollMonth", "PayrollYear", "IsClosed");
+
                     b.ToTable("Payrolls");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.PayrollClosePeriod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ClosedByUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("PayrollMonth")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PayrollYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClosedByUserAccountId");
+
+                    b.HasIndex("PayrollMonth", "PayrollYear")
+                        .IsUnique();
+
+                    b.ToTable("PayrollClosePeriods");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.PayrollDetail", b =>
@@ -584,6 +847,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -591,6 +857,9 @@ namespace NguyenDacQuan_2123110483.Migrations
 
                     b.Property<int>("DetailType")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Note")
                         .HasMaxLength(250)
@@ -621,6 +890,48 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.ToTable("PayrollDetails");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Recruitment", b =>
                 {
                     b.Property<int>("Id")
@@ -638,9 +949,15 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("datetime2");
@@ -665,6 +982,64 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.ToTable("Recruitments");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserAccountId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserAccountId", "ExpiresAt");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -676,6 +1051,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -684,6 +1062,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -712,8 +1093,14 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Note")
                         .HasMaxLength(250)
@@ -749,6 +1136,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
@@ -761,6 +1151,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ShiftCode")
                         .IsRequired()
@@ -786,6 +1179,135 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.ToTable("Shifts");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.ShiftSwapRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DecisionNote")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("RequestEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ReviewedByUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestEmployeeId");
+
+                    b.HasIndex("ReviewedByUserAccountId");
+
+                    b.HasIndex("TargetEmployeeId");
+
+                    b.HasIndex("TargetScheduleId");
+
+                    b.HasIndex("RequestScheduleId", "TargetScheduleId");
+
+                    b.ToTable("ShiftSwapRequests");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.SystemRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SystemRoles");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.SystemRolePermission", b =>
+                {
+                    b.Property<int>("SystemRoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SystemRoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("SystemRolePermissions");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Training", b =>
                 {
                     b.Property<int>("Id")
@@ -795,6 +1317,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -812,6 +1337,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRequired")
                         .ValueGeneratedOnAdd()
@@ -853,6 +1381,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
@@ -860,6 +1391,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
@@ -870,6 +1404,9 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SystemRoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -886,6 +1423,8 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .IsUnique();
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("SystemRoleId");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -916,6 +1455,32 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Navigation("Schedule");
 
                     b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.AttendanceAdjustment", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.Attendance", "Attendance")
+                        .WithMany()
+                        .HasForeignKey("AttendanceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.Employee", "Employee")
+                        .WithMany("AttendanceAdjustments")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ReviewedByUserAccount")
+                        .WithMany("ReviewedAttendanceAdjustments")
+                        .HasForeignKey("ReviewedByUserAccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Attendance");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("ReviewedByUserAccount");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.AuditLog", b =>
@@ -999,8 +1564,36 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.LeaveRequest", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.Employee", "Employee")
+                        .WithMany("LeaveRequests")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ReviewedByUserAccount")
+                        .WithMany("ReviewedLeaveRequests")
+                        .HasForeignKey("ReviewedByUserAccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("ReviewedByUserAccount");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Payroll", b =>
                 {
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ApprovedByUserAccount")
+                        .WithMany("ApprovedPayrolls")
+                        .HasForeignKey("ApprovedByUserAccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ClosedByUserAccount")
+                        .WithMany("ClosedPayrolls")
+                        .HasForeignKey("ClosedByUserAccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("CoffeeHRM.Models.EmployeeContract", "EmployeeContract")
                         .WithMany("Payrolls")
                         .HasForeignKey("EmployeeContractId")
@@ -1013,9 +1606,23 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("ApprovedByUserAccount");
+
+                    b.Navigation("ClosedByUserAccount");
+
                     b.Navigation("Employee");
 
                     b.Navigation("EmployeeContract");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.PayrollClosePeriod", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ClosedByUserAccount")
+                        .WithMany()
+                        .HasForeignKey("ClosedByUserAccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ClosedByUserAccount");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.PayrollDetail", b =>
@@ -1053,6 +1660,17 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.RefreshToken", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "UserAccount")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserAccount");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Schedule", b =>
                 {
                     b.HasOne("CoffeeHRM.Models.Employee", "Employee")
@@ -1072,6 +1690,67 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Navigation("Shift");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.ShiftSwapRequest", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.Employee", "RequestEmployee")
+                        .WithMany("RequestedShiftSwaps")
+                        .HasForeignKey("RequestEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.Schedule", "RequestSchedule")
+                        .WithMany("RequestedShiftSwaps")
+                        .HasForeignKey("RequestScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.UserAccount", "ReviewedByUserAccount")
+                        .WithMany("ReviewedShiftSwapRequests")
+                        .HasForeignKey("ReviewedByUserAccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("CoffeeHRM.Models.Employee", "TargetEmployee")
+                        .WithMany("TargetShiftSwaps")
+                        .HasForeignKey("TargetEmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.Schedule", "TargetSchedule")
+                        .WithMany("TargetShiftSwaps")
+                        .HasForeignKey("TargetScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RequestEmployee");
+
+                    b.Navigation("RequestSchedule");
+
+                    b.Navigation("ReviewedByUserAccount");
+
+                    b.Navigation("TargetEmployee");
+
+                    b.Navigation("TargetSchedule");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.SystemRolePermission", b =>
+                {
+                    b.HasOne("CoffeeHRM.Models.Permission", "Permission")
+                        .WithMany("SystemRolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CoffeeHRM.Models.SystemRole", "SystemRole")
+                        .WithMany("SystemRolePermissions")
+                        .HasForeignKey("SystemRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("SystemRole");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.UserAccount", b =>
                 {
                     b.HasOne("CoffeeHRM.Models.Employee", "Employee")
@@ -1086,9 +1765,16 @@ namespace NguyenDacQuan_2123110483.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CoffeeHRM.Models.SystemRole", "SystemRole")
+                        .WithMany("UserAccounts")
+                        .HasForeignKey("SystemRoleId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Employee");
 
                     b.Navigation("Role");
+
+                    b.Navigation("SystemRole");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.Branch", b =>
@@ -1100,6 +1786,8 @@ namespace NguyenDacQuan_2123110483.Migrations
 
             modelBuilder.Entity("CoffeeHRM.Models.Employee", b =>
                 {
+                    b.Navigation("AttendanceAdjustments");
+
                     b.Navigation("Attendances");
 
                     b.Navigation("EmployeeContracts");
@@ -1108,9 +1796,15 @@ namespace NguyenDacQuan_2123110483.Migrations
 
                     b.Navigation("KPIs");
 
+                    b.Navigation("LeaveRequests");
+
                     b.Navigation("Payrolls");
 
+                    b.Navigation("RequestedShiftSwaps");
+
                     b.Navigation("Schedules");
+
+                    b.Navigation("TargetShiftSwaps");
 
                     b.Navigation("UserAccount");
                 });
@@ -1123,6 +1817,11 @@ namespace NguyenDacQuan_2123110483.Migrations
             modelBuilder.Entity("CoffeeHRM.Models.Payroll", b =>
                 {
                     b.Navigation("PayrollDetails");
+                });
+
+            modelBuilder.Entity("CoffeeHRM.Models.Permission", b =>
+                {
+                    b.Navigation("SystemRolePermissions");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.Recruitment", b =>
@@ -1140,6 +1839,10 @@ namespace NguyenDacQuan_2123110483.Migrations
             modelBuilder.Entity("CoffeeHRM.Models.Schedule", b =>
                 {
                     b.Navigation("Attendance");
+
+                    b.Navigation("RequestedShiftSwaps");
+
+                    b.Navigation("TargetShiftSwaps");
                 });
 
             modelBuilder.Entity("CoffeeHRM.Models.Shift", b =>
@@ -1149,6 +1852,13 @@ namespace NguyenDacQuan_2123110483.Migrations
                     b.Navigation("Schedules");
                 });
 
+            modelBuilder.Entity("CoffeeHRM.Models.SystemRole", b =>
+                {
+                    b.Navigation("SystemRolePermissions");
+
+                    b.Navigation("UserAccounts");
+                });
+
             modelBuilder.Entity("CoffeeHRM.Models.Training", b =>
                 {
                     b.Navigation("EmployeeTrainings");
@@ -1156,7 +1866,19 @@ namespace NguyenDacQuan_2123110483.Migrations
 
             modelBuilder.Entity("CoffeeHRM.Models.UserAccount", b =>
                 {
+                    b.Navigation("ApprovedPayrolls");
+
                     b.Navigation("AuditLogs");
+
+                    b.Navigation("ClosedPayrolls");
+
+                    b.Navigation("RefreshTokens");
+
+                    b.Navigation("ReviewedAttendanceAdjustments");
+
+                    b.Navigation("ReviewedLeaveRequests");
+
+                    b.Navigation("ReviewedShiftSwapRequests");
                 });
 #pragma warning restore 612, 618
         }

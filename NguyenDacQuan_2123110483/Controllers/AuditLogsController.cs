@@ -1,98 +1,45 @@
-using CoffeeHRM.Data;
+using CoffeeHRM.Dtos;
 using CoffeeHRM.Models;
+using CoffeeHRM.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeHRM.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuditLogsController : ControllerBase
+[PermissionAuthorize(PermissionCodes.AuditView)]
+public class AuditLogsController : ApiControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IAuditLogService _auditLogService;
 
-    public AuditLogsController(AppDbContext context)
+    public AuditLogsController(IAuditLogService auditLogService)
     {
-        _context = context;
+        _auditLogService = auditLogService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AuditLog>>> GetAuditLogs(
-        [FromQuery] DateTime? fromDate,
-        [FromQuery] DateTime? toDate,
-        [FromQuery] int? userAccountId,
-        [FromQuery] string? tableName)
+    public async Task<ActionResult<IEnumerable<AuditLogResponseDto>>> GetAuditLogs([FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate, [FromQuery] int? userAccountId, [FromQuery] string? tableName, CancellationToken cancellationToken)
     {
-        var query = _context.AuditLogs
-            .Include(x => x.UserAccount)
-            .AsNoTracking()
-            .AsQueryable();
-
-        if (fromDate.HasValue)
-        {
-            query = query.Where(x => x.CreatedAt >= fromDate.Value);
-        }
-
-        if (toDate.HasValue)
-        {
-            query = query.Where(x => x.CreatedAt <= toDate.Value);
-        }
-
-        if (userAccountId.HasValue)
-        {
-            query = query.Where(x => x.UserAccountId == userAccountId.Value);
-        }
-
-        if (!string.IsNullOrWhiteSpace(tableName))
-        {
-            query = query.Where(x => x.TableName == tableName);
-        }
-
-        return await query
-            .OrderByDescending(x => x.CreatedAt)
-            .ToListAsync();
+        return Ok(await _auditLogService.GetAllAsync(fromDate, toDate, userAccountId, tableName, cancellationToken));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<AuditLog>> GetAuditLog(int id)
+    public async Task<ActionResult<AuditLogResponseDto>> GetAuditLog(int id, CancellationToken cancellationToken)
     {
-        var auditLog = await _context.AuditLogs
-            .Include(x => x.UserAccount)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (auditLog == null)
-        {
-            return NotFound();
-        }
-
-        return auditLog;
+        var auditLog = await _auditLogService.GetByIdAsync(id, cancellationToken);
+        return auditLog == null ? NotFound() : Ok(auditLog);
     }
 
     [HttpGet("user/{userAccountId:int}")]
-    public async Task<ActionResult<IEnumerable<AuditLog>>> GetByUserAccount(int userAccountId)
+    public async Task<ActionResult<IEnumerable<AuditLogResponseDto>>> GetByUserAccount(int userAccountId, CancellationToken cancellationToken)
     {
-        return await _context.AuditLogs
-            .Include(x => x.UserAccount)
-            .Where(x => x.UserAccountId == userAccountId)
-            .AsNoTracking()
-            .OrderByDescending(x => x.CreatedAt)
-            .ToListAsync();
+        return Ok(await _auditLogService.GetByUserAsync(userAccountId, cancellationToken));
     }
 
     [HttpGet("table/{tableName}")]
-    public async Task<ActionResult<IEnumerable<AuditLog>>> GetByTableName(string tableName)
+    public async Task<ActionResult<IEnumerable<AuditLogResponseDto>>> GetByTableName(string tableName, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(tableName))
-        {
-            return BadRequest("TableName is required.");
-        }
-
-        return await _context.AuditLogs
-            .Include(x => x.UserAccount)
-            .Where(x => x.TableName == tableName)
-            .AsNoTracking()
-            .OrderByDescending(x => x.CreatedAt)
-            .ToListAsync();
+        var result = await _auditLogService.GetByTableAsync(tableName, cancellationToken);
+        return result.Error == null ? Ok(result.Logs) : ApiError(result.Error!, result.StatusCode ?? StatusCodes.Status400BadRequest);
     }
 }

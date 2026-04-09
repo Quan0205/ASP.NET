@@ -48,5 +48,9 @@ public class Employee : AuditableEntity
     public ICollection<Payroll> Payrolls { get; set; } = new List<Payroll>();
     public ICollection<KPI> KPIs { get; set; } = new List<KPI>();
     public ICollection<EmployeeTraining> EmployeeTrainings { get; set; } = new List<EmployeeTraining>();
+    public ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
+    public ICollection<ShiftSwapRequest> RequestedShiftSwaps { get; set; } = new List<ShiftSwapRequest>();
+    public ICollection<ShiftSwapRequest> TargetShiftSwaps { get; set; } = new List<ShiftSwapRequest>();
+    public ICollection<AttendanceAdjustment> AttendanceAdjustments { get; set; } = new List<AttendanceAdjustment>();
     public UserAccount? UserAccount { get; set; }
 }

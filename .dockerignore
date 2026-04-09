@@ -1,0 +1,11 @@
+.git
+.github
+.vs
+**/bin
+**/obj
+**/node_modules
+**/dist
+*.user
+*.suo
+temp-backend.err.log
+temp-backend.out.log

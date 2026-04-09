@@ -23,4 +23,6 @@ public class Schedule : AuditableEntity
     public Employee? Employee { get; set; }
     public Shift? Shift { get; set; }
     public Attendance? Attendance { get; set; }
+    public ICollection<ShiftSwapRequest> RequestedShiftSwaps { get; set; } = new List<ShiftSwapRequest>();
+    public ICollection<ShiftSwapRequest> TargetShiftSwaps { get; set; } = new List<ShiftSwapRequest>();
 }

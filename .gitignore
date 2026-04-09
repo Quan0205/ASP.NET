@@ -341,6 +341,27 @@ ASALocalRun/
 # MSBuild Binary and Structured Log
 *.binlog
 
+# Project temp artifacts
+build-temp-backend/
+api-test-results-stage*.json
+api-test-state.json
+app-run.err
+app-run.err.log
+app-run.out.log
+**/app-run.err.log
+**/app-run.out.log
+app-run.out
+app-run.log
+app-test-err.log
+app-test-out.log
+backend-https.err.log
+backend-https.out.log
+backend-runtime.err.log
+backend-runtime.out.log
+.env
+.env.*
+!.env.example
+
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
 

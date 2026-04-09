@@ -42,14 +42,29 @@ public class Payroll : AuditableEntity
     public decimal PenaltyAmount { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
+    public decimal InsuranceAmount { get; set; }
+
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal TaxAmount { get; set; }
+
+    [Column(TypeName = "decimal(18,2)")]
     public decimal TotalSalary { get; set; }
 
     [Required]
     public PayrollStatus Status { get; set; } = PayrollStatus.Draft;
 
     public DateTime? PaidDate { get; set; }
+    public DateTime? ApprovedAt { get; set; }
+    public int? ApprovedByUserAccountId { get; set; }
+    public bool IsClosed { get; set; }
+    public DateTime? ClosedAt { get; set; }
+    public int? ClosedByUserAccountId { get; set; }
+    [StringLength(250)]
+    public string? Note { get; set; }
 
     public Employee? Employee { get; set; }
     public EmployeeContract? EmployeeContract { get; set; }
+    public UserAccount? ApprovedByUserAccount { get; set; }
+    public UserAccount? ClosedByUserAccount { get; set; }
     public ICollection<PayrollDetail> PayrollDetails { get; set; } = new List<PayrollDetail>();
 }
